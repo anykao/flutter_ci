@@ -15,7 +15,7 @@ before_script:
 script:
   - ./flutter/bin/flutter create myapp
   - cd myapp
-  - ./flutter/bin/flutter -v build ios --no-codesign
+  - ../flutter/bin/flutter -v build ios --no-codesign
   - mkdir -p Payload
   - mv build/ios/iphoneos/Runner.app Payload
   - zip -r ${IPA_PATH} Payload
