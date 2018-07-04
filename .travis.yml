@@ -1,0 +1,24 @@
+os: osx
+language: generic
+osx_image: xcode9.4
+env:
+  -PARENT="1BPIKK7sxbfdDu59wKmp3dl83lXpTkHRJ"
+  -IPA_PATH="myapp.ipa"
+before_script:
+  - pip install six
+  - brew update
+  - brew install gdrive
+  - brew install --HEAD libimobiledevice
+  - brew install ideviceinstaller ios-deploy
+  - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+  # - ./ci/add-key.sh
+script:
+  - ./flutter/bin/flutter create myapp
+  - cd myapp
+  - ./flutter/bin/flutter -v build ios --no-codesign
+  - mkdir -p Payload
+  - mv build/ios/iphoneos/Runner.app Payload
+  - zip -r ${IPA_PATH} Payload
+after_script:
+  - gdrive upload --refresh-token ${REFRESH_TOKEN} --parent ${PARENT} ${IPA_PATH}
+ 
